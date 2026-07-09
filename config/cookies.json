@@ -1,0 +1,36 @@
+{
+  "_description": "Store your TikTok session cookies here. These are used by the uploader for authenticated uploads.",
+  "_how_to_get": "1. Log into TikTok in your browser. 2. Open DevTools > Application > Cookies. 3. Copy relevant session cookies.",
+  "cookies": [
+    {
+      "name": "sessionid",
+      "value": "YOUR_SESSION_ID_HERE",
+      "domain": ".tiktok.com",
+      "path": "/"
+    },
+    {
+      "name": "sessionid_ss",
+      "value": "YOUR_SESSION_ID_SS_HERE",
+      "domain": ".tiktok.com",
+      "path": "/"
+    },
+    {
+      "name": "sid_tt",
+      "value": "YOUR_SID_TT_HERE",
+      "domain": ".tiktok.com",
+      "path": "/"
+    },
+    {
+      "name": "uid_tt",
+      "value": "YOUR_UID_TT_HERE",
+      "domain": ".tiktok.com",
+      "path": "/"
+    },
+    {
+      "name": "tt_csrf_token",
+      "value": "YOUR_CSRF_TOKEN_HERE",
+      "domain": ".tiktok.com",
+      "path": "/"
+    }
+  ]
+}

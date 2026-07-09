@@ -1,0 +1,91 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# TikTok Auto Pipeline - Git Ignore
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Environment & Secrets ─────────────────────────────────────────────────────
+.env
+.env.local
+.env.*.local
+!.env.example
+
+# ── Python ────────────────────────────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# ── Virtual Environments ──────────────────────────────────────────────────────
+venv/
+env/
+ENV/
+env.bak/
+venv.bak/
+.venv/
+
+# ── IDE / Editors ─────────────────────────────────────────────────────────────
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+*.sublime-project
+*.sublime-workspace
+
+# ── Database ──────────────────────────────────────────────────────────────────
+*.db
+*.sqlite
+*.sqlite3
+tiktok_pipeline.db
+
+# ── Logs ──────────────────────────────────────────────────────────────────────
+logs/
+*.log
+*.json.log
+
+# ── Storage (Temporary Video Files) ───────────────────────────────────────────
+storage/raw/*.mp4
+storage/raw/*.mov
+storage/raw/*.avi
+storage/raw/*.mkv
+storage/processed/*.mp4
+storage/processed/*.mov
+storage/processed/*.avi
+storage/processed/*.mkv
+
+# ── Cookies (Sensitive Session Data) ──────────────────────────────────────────
+config/cookies.json
+!config/cookies.json.example
+
+# ── Testing ───────────────────────────────────────────────────────────────────
+.pytest_cache/
+.coverage
+htmlcov/
+.tox/
+.nox/
+
+# ── Docker ────────────────────────────────────────────────────────────────────
+docker-compose.override.yml
+
+# ── OS ────────────────────────────────────────────────────────────────────────
+Thumbs.db
+.DS_Store
+*.tmp
+*.temp

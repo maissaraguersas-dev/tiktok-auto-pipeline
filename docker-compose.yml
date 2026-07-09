@@ -1,0 +1,146 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# TikTok Auto Pipeline - Docker Compose
+# ═══════════════════════════════════════════════════════════════════════════════
+
+version: "3.8"
+
+services:
+  # ── Main Pipeline Application ──────────────────────────────────────────────
+  pipeline:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: runtime
+    container_name: tiktok-pipeline
+    restart: unless-stopped
+
+    # Command override (runs in continuous loop by default)
+    command: ["--loop", "--interval", "3600"]
+
+    # Environment variables
+    env_file:
+      - .env
+    environment:
+      # Database (uses SQLite by default, switch to PostgreSQL if needed)
+      - DB_PROVIDER=${DB_PROVIDER:-sqlite}
+      - SQLITE_DB_NAME=${SQLITE_DB_NAME:-tiktok_pipeline.db}
+      - POSTGRES_HOST=postgres
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=${POSTGRES_USER:-pipeline}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_DB=${POSTGRES_DB:-tiktok_pipeline}
+
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL:-INFO}
+      - DEBUG=${DEBUG:-false}
+
+      # Storage paths
+      - STORAGE_RAW=/app/storage/raw
+      - STORAGE_PROCESSED=/app/storage/processed
+
+    volumes:
+      # Persist database
+      - pipeline_data:/app/data
+      # Persist logs
+      - pipeline_logs:/app/logs
+      # Temporary storage (bind mount for easy access)
+      - ./storage:/app/storage
+      # Cookie file (mount your actual cookies)
+      - ./config/cookies.json:/app/config/cookies.json:ro
+      # Environment file
+      - ./.env:/app/.env:ro
+
+    # Resource limits
+    deploy:
+      resources:
+        limits:
+          cpus: "2.0"
+          memory: 2G
+        reservations:
+          cpus: "0.5"
+          memory: 512M
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "python", "-c", "import sys; sys.exit(0)"]
+      interval: 60s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+
+    # Networking
+    networks:
+      - pipeline_network
+
+    # Dependencies (optional - remove if using SQLite)
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ── PostgreSQL Database (Optional) ─────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: tiktok-postgres
+    restart: unless-stopped
+
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER:-pipeline}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-changeme}
+      - POSTGRES_DB=${POSTGRES_DB:-tiktok_pipeline}
+
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+    # Performance tuning for small workloads
+    command:
+      - "postgres"
+      - "-c"
+      - "shared_buffers=256MB"
+      - "-c"
+      - "effective_cache_size=768MB"
+      - "-c"
+      - "maintenance_work_mem=64MB"
+      - "-c"
+      - "wal_buffers=16MB"
+
+    ports:
+      - "5432:5432"
+
+    networks:
+      - pipeline_network
+
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-pipeline}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ── Optional: Adminer for Database Management ──────────────────────────────
+  adminer:
+    image: adminer:latest
+    container_name: tiktok-adminer
+    restart: unless-stopped
+
+    ports:
+      - "8080:8080"
+
+    networks:
+      - pipeline_network
+
+    profiles:
+      - admin
+
+# ── Networks ─────────────────────────────────────────────────────────────────
+networks:
+  pipeline_network:
+    driver: bridge
+
+# ── Volumes ──────────────────────────────────────────────────────────────────
+volumes:
+  pipeline_data:
+    driver: local
+  pipeline_logs:
+    driver: local
+  postgres_data:
+    driver: local

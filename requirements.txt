@@ -1,0 +1,42 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# TikTok Auto Pipeline - Python Dependencies
+# ═══════════════════════════════════════════════════════════════════════════════
+
+# ── Core Framework ────────────────────────────────────────────────────────────
+python-dotenv>=1.0.0          # Environment variable management
+
+# ── Async HTTP Client ─────────────────────────────────────────────────────────
+httpx[http2]>=0.27.0          # Modern async HTTP client with HTTP/2 support
+
+# ── Database ──────────────────────────────────────────────────────────────────
+sqlalchemy>=2.0.0             # SQL ORM and database abstraction
+psycopg2-binary>=2.9.9        # PostgreSQL adapter (optional, for PostgreSQL mode)
+
+# ── Browser Automation ────────────────────────────────────────────────────────
+playwright>=1.44.0            # Headless browser automation
+
+# ── Video Processing ──────────────────────────────────────────────────────────
+# FFmpeg must be installed separately (via apt, brew, etc.)
+# yt-dlp for video downloading
+yt-dlp>=2024.5.0              # YouTube/TikTok video downloader
+
+# ── AI / LLM Integration ──────────────────────────────────────────────────────
+# OpenAI and Anthropic clients use httpx, no additional package needed
+# API keys are configured via environment variables
+
+# ── Data Validation ───────────────────────────────────────────────────────────
+pydantic>=2.0.0               # Data validation and serialization
+
+# ── Scheduling (Optional) ─────────────────────────────────────────────────────
+# apscheduler>=3.10.0           # Advanced Python scheduler (if needed)
+
+# ── Development / Testing ─────────────────────────────────────────────────────
+pytest>=8.0.0                 # Testing framework
+pytest-asyncio>=0.23.0        # Async test support
+pytest-cov>=5.0.0             # Test coverage
+black>=24.0.0                 # Code formatter
+flake8>=7.0.0                 # Linting
+mypy>=1.9.0                   # Type checking
+
+# ── Production Monitoring ─────────────────────────────────────────────────────
+# prometheus-client>=0.20.0     # Metrics (optional)
